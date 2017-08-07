@@ -107,10 +107,10 @@ GREET
 	# ----------------------------------------------------------------------
 	section("Configuring MySQL...");
 	print "Creating cloudcoder user...\n";
-	Run("mysql", "--user=root", "--pass=$ccMysqlRootPasswd",
+	Run("mysql", "--user=root", "-p$ccMysqlRootPasswd",
 		"--execute=create user 'cloudcoder'\@'localhost' identified by '$ccMysqlCCPasswd'");
 	print "Granting permissions on cloudcoderdb to cloudcoder...\n";
-	Run("mysql", "--user=root", "--pass=$ccMysqlRootPasswd",
+	Run("mysql", "--user=root", "-p$ccMysqlRootPasswd",
 		"--execute=grant all on cloudcoderdb.* to 'cloudcoder'\@'localhost'");
 	
 	# ----------------------------------------------------------------------
