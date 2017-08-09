@@ -107,4 +107,13 @@ public class CommandResult {
 	public List<String> getStderr() {
 		return stderr;
 	}
+
+	public String popActualFromStderr() {
+		String retval = null;
+		if (this.stderr.size() > 0 && this.stderr.get(this.stderr.size()-1).startsWith("ACTUAL OUTPUT: ")) {
+			retval = this.stderr.get(this.stderr.size()-1).replaceAll("ACTUAL OUTPUT: ", "");
+			this.stderr = this.stderr.subList(0, this.stderr.size()-1);
+		}
+		return retval;
+	}
 }

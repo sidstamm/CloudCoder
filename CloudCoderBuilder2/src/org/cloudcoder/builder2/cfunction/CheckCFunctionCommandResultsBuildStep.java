@@ -64,12 +64,17 @@ public class CheckCFunctionCommandResultsBuildStep implements IBuildStep {
 				// Abnormal process exit
 				testResultList[i] = TestResultUtil.createTestResultForAbnormalExit(commandResult, problem, testCaseList[i]);
 			} else {
+				// grab the smuggled ACTUAL OUTPUT from stdout (and trim stdout)
+				String actualOutput = commandResult.popActualFromStderr();
+
 				// Check exit code
 				int exitCode = commandResultList[i].getExitCode();
 				if (exitCode == codes.getSuccessCode()) {
 					testResultList[i] = TestResultUtil.createTestResultForPassedTest(commandResult, problem, testCaseList[i]);
+					testResultList[i].setActualOutput(actualOutput);
 				} else {
 					testResultList[i] = TestResultUtil.createTestResultForFailedAssertion(commandResult, problem, testCaseList[i]);
+					testResultList[i].setActualOutput(actualOutput);
 				}
 			}
 		}
