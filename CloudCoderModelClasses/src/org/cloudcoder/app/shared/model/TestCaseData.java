@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author David Hovemeyer
  */
 public class TestCaseData implements Serializable, ITestCaseData {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	//
 	// IMPORTANT: if you add any fields, make sure that you
@@ -37,10 +37,12 @@ public class TestCaseData implements Serializable, ITestCaseData {
 	private String testCaseName;
 	private String input;
 	private String output;
+	private String outputType;
 	private boolean secret;
 
 	public TestCaseData() {
 		super();
+		this.outputType = "";
 	}
 
 	/* (non-Javadoc)
@@ -92,6 +94,22 @@ public class TestCaseData implements Serializable, ITestCaseData {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.cloudcoder.app.shared.model.ITestCaseData#setOutputType(java.lang.String)
+	 */
+	@Override
+	public void setOutputType(String outputType) {
+		this.outputType = outputType;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.cloudcoder.app.shared.model.ITestCaseData#getOutputType()
+	 */
+	@Override
+	public String getOutputType() {
+		return outputType;
+	}
+
+	/* (non-Javadoc)
 	 * @see org.cloudcoder.app.shared.model.ITestCaseData#setSecret(boolean)
 	 */
 	@Override
@@ -116,9 +134,10 @@ public class TestCaseData implements Serializable, ITestCaseData {
 		this.testCaseName = other.testCaseName;
 		this.input = other.input;
 		this.output = other.output;
+		this.outputType = other.outputType;
 		this.secret = other.secret;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof TestCaseData)) {
@@ -128,6 +147,7 @@ public class TestCaseData implements Serializable, ITestCaseData {
 		return ModelObjectUtil.equals(this.testCaseName, other.testCaseName)
 				&& ModelObjectUtil.equals(this.input, other.input)
 				&& ModelObjectUtil.equals(this.output, other.output)
+				&& ModelObjectUtil.equals(this.outputType, other.outputType)
 				&& this.secret == other.secret;
 	}
 }

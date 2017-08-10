@@ -69,6 +69,22 @@ public interface ITestCaseData {
 	public abstract String getOutput();
 
 	/**
+	 * Set the expected output type of the test case.
+	 * Required for C-Function test cases and other strongly typed languages.
+	 * Ignored for other test types.
+	 * @param outputType the expected outputType of the test case
+	 */
+	public abstract void setOutputType(String outputType);
+
+	/**
+	 * Get the expected output type of the test case.
+	 * Required for C-Function test cases and other strongly typed languages.
+	 * Ignored for other test types.
+	 * @return the expected output type of the test case
+	 */
+	public abstract String getOutputType();
+
+	/**
 	 * Set whether or not the test case is secret.
 	 * @param secret true if the test case is secret, false otherwise
 	 */
@@ -115,13 +131,20 @@ public interface ITestCaseData {
 			public String get(ITestCaseData obj) { return obj.getOutput(); }
 		};
 
+	/** {@link ModelObjectField} for outputType (schema version 2). */
+	public static final ModelObjectField<ITestCaseData, String> OUTPUT_TYPE =
+		new ModelObjectField<ITestCaseData, String>("outputType", String.class, 255) {
+			public void set(ITestCaseData obj, String value) { obj.setOutputType(value); }
+			public String get(ITestCaseData obj) { return obj.getOutputType(); }
+		};
+
 	/** {@link ModelObjectField} for secret. */
 	public static final ModelObjectField<ITestCaseData, Boolean> SECRET =
 		new ModelObjectField<ITestCaseData, Boolean>("secret", Boolean.class, 0) {
 			public void set(ITestCaseData obj, Boolean value) { obj.setSecret(value); }
 			public Boolean get(ITestCaseData obj) { return obj.isSecret(); }
 		};
-	
+
 	/**
 	 * Description of fields (schema version 0).
 	 */
@@ -130,7 +153,7 @@ public interface ITestCaseData {
 		.add(INPUT_V0)
 		.add(OUTPUT_V0)
 		.add(SECRET);
-	
+
 	/**
 	 * Description of fields (schema version 1).
 	 */
@@ -138,9 +161,15 @@ public interface ITestCaseData {
 		.increaseFieldSize(INPUT)
 		.increaseFieldSize(OUTPUT)
 		.finishDelta();
-	
+
+	/**
+	 * Description of fields (schema version 2).
+	 */
+	public static final ModelObjectSchema<ITestCaseData> SCHEMA_V2 = ModelObjectSchema.basedOn(SCHEMA_V1, ITestCaseData.class)
+		.addAfter(OUTPUT, OUTPUT_TYPE);
+
 	/**
 	 * Description of fields (latest schema version).
 	 */
-	public static final ModelObjectSchema<ITestCaseData> SCHEMA = SCHEMA_V1;
+	public static final ModelObjectSchema<ITestCaseData> SCHEMA = SCHEMA_V2;
 }

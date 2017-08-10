@@ -61,6 +61,8 @@ public class TestCaseEditor {
 			fieldEditorList.add(new EditStringField<TestCase>("Test case name", TestCase.TEST_CASE_NAME));
 			fieldEditorList.add(new EditStringField<TestCase>("Test input", TestCase.INPUT));
 			fieldEditorList.add(new EditStringField<TestCase>("Test output", TestCase.OUTPUT));
+			// TODO: make this an Enum type
+			fieldEditorList.add(new EditStringField<TestCase>("Output type", TestCase.OUTPUT_TYPE));
 			fieldEditorList.add(new EditBooleanField<TestCase>(
 					"Secret",
 					"If checked, the test is secret (not revealed to students)",

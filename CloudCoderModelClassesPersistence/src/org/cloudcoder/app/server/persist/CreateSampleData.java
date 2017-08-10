@@ -156,14 +156,17 @@ public class CreateSampleData {
 		testCases[0].setTestCaseName("t0");
 		testCases[0].setInput("2, 3");
 		testCases[0].setOutput("5");
+		testCases[0].setOutputType("int");
 		testCases[0].setSecret(false);
 		testCases[1].setTestCaseName("t1");
 		testCases[1].setInput("-3, -11");
 		testCases[1].setOutput("-14");
+		testCases[1].setOutputType("int");
 		testCases[1].setSecret(false);
 		testCases[2].setTestCaseName("t2");
 		testCases[2].setInput("0, 7");
 		testCases[2].setOutput("7");
+		testCases[2].setOutputType("int");
 		testCases[2].setSecret(false);
 	}
 

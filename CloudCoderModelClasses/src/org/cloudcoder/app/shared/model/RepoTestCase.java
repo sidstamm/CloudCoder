@@ -60,6 +60,13 @@ public class RepoTestCase extends TestCaseData implements IModelObject<RepoTestC
 		.finishDelta();
 	
 	/**
+	 * Description of fields (schema version 2).
+	 */
+	public static final ModelObjectSchema<RepoTestCase> SCHEMA_V2 = ModelObjectSchema.basedOn(SCHEMA_V1, RepoTestCase.class)
+		.addDeltasFrom(ITestCaseData.SCHEMA_V2)
+		.finishDelta();
+
+	/**
 	 * Description of fields (current schema version).
 	 */
 	public static final ModelObjectSchema<RepoTestCase> SCHEMA = SCHEMA_V1;

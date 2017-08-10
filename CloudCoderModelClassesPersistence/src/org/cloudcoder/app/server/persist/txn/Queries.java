@@ -624,7 +624,7 @@ public class Queries {
 			AbstractDatabaseRunnable<?> databaseRunnable) throws SQLException {
 		PreparedStatement stmt = databaseRunnable.prepareStatement(
 				conn,
-				"insert into " + TestCase.SCHEMA.getDbTableName() + " values (NULL, ?, ?, ?, ?, ?)",
+				"insert into " + TestCase.SCHEMA.getDbTableName() + " values (NULL, ?, ?, ?, ?, ?, ?)",
 				PreparedStatement.RETURN_GENERATED_KEYS
 		);
 		

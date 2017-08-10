@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author David Hovemeyer
  */
 public class TestCase extends TestCaseData implements Serializable, ITestCase, IModelObject<TestCase> {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	private int testCaseId;
 	private int problemId;
@@ -62,9 +62,17 @@ public class TestCase extends TestCaseData implements Serializable, ITestCase, I
 		.finishDelta();
 	
 	/**
+	 * Description of fields (schema version 2).
+	 */
+	public static final ModelObjectSchema<TestCase> SCHEMA_V2 = ModelObjectSchema.basedOn(SCHEMA_V1, TestCase.class)
+		.addAll(ITestCaseData.SCHEMA_V2.getFieldList())
+		.addDeltasFrom(ITestCaseData.SCHEMA_V2)
+		.finishDelta();
+		
+	/**
 	 * Description of fields (current schema version).
 	 */
-	public static final ModelObjectSchema<TestCase> SCHEMA = SCHEMA_V1;
+	public static final ModelObjectSchema<TestCase> SCHEMA = SCHEMA_V2;
 	
 	
 	public TestCase() {
@@ -122,6 +130,7 @@ public class TestCase extends TestCaseData implements Serializable, ITestCase, I
 		empty.setTestCaseName("");
 		empty.setInput("");
 		empty.setOutput("");
+		empty.setOutputType("");
 		empty.setSecret(false);
 		return empty;
 	}
