@@ -17,6 +17,7 @@
 
 package org.cloudcoder.builder2.cfunction;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.cloudcoder.app.shared.model.Problem;
@@ -41,6 +42,23 @@ import org.cloudcoder.builder2.util.StringUtil;
  * @author Jaime Spacco
  */
 public class AddCFunctionScaffoldingBuildStep implements IBuildStep {
+
+	/**
+	 * These are the supported return value types for CFunction tests.
+	 */
+	public static final HashMap<String, String> FORMAT_STRING_MAP = new HashMap<String,String>() {
+		private static final long serialVersionUID = 1L;
+	{
+		put("int", "%d");
+		put("unsigned int", "%u");
+		put("char", "%c");
+		put("long", "%ld");
+		put("long long", "%lld");
+		put("short", "%d");
+		put("float", "%g");
+		put("double", "%g");
+		put("void*", "%p");
+	}};
 
 	@Override
 	public void execute(BuilderSubmission submission, Properties config) {
@@ -91,12 +109,33 @@ public class AddCFunctionScaffoldingBuildStep implements IBuildStep {
 
 		// Generate calls to execute test cases.
 		for (TestCase t : testCaseList) {
-			test.append("  if (strcmp(argv[1], \"" +t.getTestCaseName()+"\")==0) {\n");
+			String conversion = FORMAT_STRING_MAP.get(t.getOutputType());
+			if (conversion == null) {
+				System.out.println("WARNING: " + t.getTestCaseName() +
+						           " expects return type "+t.getOutputType()+" but" +
+						           " unable to print it using fprintf.\n");
+				conversion = "%x";
+			}
+			/*
+			    Consider a test case called "t0" with output type "int" and function
+			    called "testFunction". It takes two inputs (100,200) and expects
+			    output 300.  This generates code like this:
 
-			//TODO: change the fprintf format template based on expected return type
-			test.append("    int res = " +problem.getTestname() + "("+t.getInput()+");\n");
-			test.append("    fprintf(stderr, \"\\nACTUAL OUTPUT: %d\\n\", res);\n");
-			test.append("    return eq(res, ("+t.getOutput()+")) ? rcIfEqual : rcIfNotEqual;\n");
+			if (strcmp(argv[1], "t0")==0) {
+				int res = testFunction(100,200);
+				fprintf(stderr, "\nACTUAL OUTPUT: %d\n", res);
+				return eq(res, ((int)300)) ? rcIfEqual : rcIfNotEqual;
+			}
+				Note: It gets hairy writing floating point tests due to rounding errors
+				so it's important to pick good test cases.  :)
+				Alternatively, we could implement epsilon comparison
+				for floats here.  TODO?
+			*/
+
+			test.append("  if (strcmp(argv[1], \"" +t.getTestCaseName()+"\")==0) {\n");
+			test.append("    "+t.getOutputType()+" res = " +problem.getTestname() + "("+t.getInput()+");\n");
+			test.append("    fprintf(stderr, \"\\nACTUAL OUTPUT: "+conversion+"\\n\", res);\n");
+			test.append("    return eq(res, ("+t.getOutputType()+")"+t.getOutput()+") ? rcIfEqual : rcIfNotEqual;\n");
 			test.append("  }\n");
 		}
 
